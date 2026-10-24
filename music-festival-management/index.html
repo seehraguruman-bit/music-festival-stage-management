@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Festival - Artist & Stage Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Printable timetable container for native browser printing -->
+  <div id="printable-timetable-area"></div>
+
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper">
+          <div class="brand-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div>
+            <div class="brand-title">AURA STAGE</div>
+            <div class="brand-sub">Festival Operations</div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Operations</div>
+        <a href="#dashboard" class="nav-link active" data-tab="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#schedule" class="nav-link" data-tab="schedule">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Schedule & Timeline</span>
+        </a>
+        <a href="#conflicts" class="nav-link" data-tab="conflicts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Conflicts Engine</span>
+          <span id="nav-conflict-badge" class="nav-badge" style="display: none;">0</span>
+        </a>
+
+        <div class="nav-section-title">Directory</div>
+        <a href="#artists" class="nav-link" data-tab="artists">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Artists & Bands</span>
+        </a>
+        <a href="#stages" class="nav-link" data-tab="stages">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span>Festival Stages</span>
+        </a>
+        <a href="#technical" class="nav-link" data-tab="technical">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Technical Rider Audit</span>
+        </a>
+
+        <div class="nav-section-title">Output</div>
+        <a href="#reports" class="nav-link" data-tab="reports">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Reports & CSV Export</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p class="storage-notice">
+          <strong>Storage Status:</strong> Browser localStorage active. Data persists locally across reloads.
+        </p>
+        <button id="btn-reset-demo-data" class="btn btn-secondary btn-sm" title="Restore sample artists, stages, and schedules">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Reset Demo Data
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEWPORT -->
+    <main class="app-main">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button id="mobile-menu-toggle" class="mobile-toggle" aria-label="Toggle navigation">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="festival-indicator">
+            <span class="status-dot"></span>
+            <span class="festival-title">Aura Sound & Arts Festival 2026</span>
+            <span class="badge badge-subtle">Aug 15 &bull; Aug 16</span>
+          </div>
+        </div>
+
+        <div class="top-bar-right">
+          <button class="btn btn-secondary btn-sm" onclick="FMS.Schedule.openPerformanceModal(null)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Schedule Performance
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="FMS.Reports.printTimetable('2026-08-15')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print Timetable
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT SECTIONS -->
+      <div class="content-viewport">
+
+        <!-- ============================================================== -->
+        <!-- 1. DASHBOARD VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-dashboard" class="tab-view">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Operations Overview</h2>
+              <div class="section-subtitle">Real-time scheduling analytics, stage distribution, and conflict alerts.</div>
+            </div>
+          </div>
+
+          <!-- KPI Counters Grid -->
+          <div class="dashboard-stats-grid">
+            <div class="card stat-card">
+              <div class="stat-icon stat-icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Total Artists</span>
+                <span id="stat-total-artists" class="stat-val">12</span>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon stat-icon-purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Active Stages</span>
+                <span id="stat-total-stages" class="stat-val">4</span>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon stat-icon-green">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Scheduled Sets</span>
+                <span id="stat-total-perfs" class="stat-val">14</span>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon stat-icon-red">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Detected Conflicts</span>
+                <span id="stat-total-conflicts" class="stat-val text-danger">4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conflict Alert Banner (Dynamic) -->
+          <div id="dashboard-conflict-alert" class="conflict-alert-banner" style="display: none;"></div>
+
+          <!-- Main Dashboard Two-Column Grid -->
+          <div class="dashboard-main-grid">
+            <div class="dashboard-col-left">
+              <!-- Stage Distribution Card -->
+              <div class="card mb-4" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                  <h3>Stage-Wise Performance Distribution</h3>
+                  <span class="badge badge-subtle">Capacity Load</span>
+                </div>
+                <div id="stage-distribution-chart"></div>
+              </div>
+
+              <!-- Upcoming Sets -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>Upcoming Festival Performances</h3>
+                  <button class="btn btn-ghost btn-xs" onclick="FMS.App.switchTab('schedule')">View All</button>
+                </div>
+                <div id="dashboard-upcoming-list"></div>
+              </div>
+            </div>
+
+            <div class="dashboard-col-right">
+              <!-- Activity Log -->
+              <div class="card">
+                <div class="card-header">
+                  <h3>Recent Scheduling Activity</h3>
+                  <span class="badge badge-subtle">Audit Trail</span>
+                </div>
+                <div id="dashboard-activity-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 2. ARTIST MANAGEMENT VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-artists" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Festival Artists & Bands</h2>
+              <div class="section-subtitle">Manage artist contacts, technical riders, soundcheck requirements, and biographics.</div>
+            </div>
+            <div class="header-controls">
+              <button id="btn-add-artist" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add New Artist
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-left">
+              <div class="search-input-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="artist-search-input" placeholder="Search by name, ID, or manager...">
+              </div>
+              <select id="artist-genre-filter">
+                <option value="all">All Genres</option>
+              </select>
+            </div>
+            <div class="filter-right">
+              <span id="artists-count-badge" class="badge badge-subtle">12 Artists</span>
+            </div>
+          </div>
+
+          <!-- Artists Cards Grid -->
+          <div id="artists-grid" class="cards-grid"></div>
+
+          <!-- Empty State -->
+          <div id="artists-empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">🎤</div>
+            <h3>No Artists Found</h3>
+            <p>No artists match your current search or genre filter. Try adjusting your query or add a new artist.</p>
+            <button class="btn btn-primary btn-sm" onclick="FMS.Artists.openArtistModal(null)">Add New Artist</button>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 3. STAGE MANAGEMENT VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-stages" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Festival Stages & Venues</h2>
+              <div class="section-subtitle">Configure stage dimensions, capacity limits, turnaround buffers, and backline inventories.</div>
+            </div>
+            <div class="header-controls">
+              <button id="btn-add-stage" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Create New Stage
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-left">
+              <div class="search-input-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="stage-search-input" placeholder="Search stages by name, location, or ID...">
+              </div>
+            </div>
+            <div class="filter-right">
+              <span id="stages-count-badge" class="badge badge-subtle">4 Stages</span>
+            </div>
+          </div>
+
+          <!-- Stages Grid -->
+          <div id="stages-grid" class="cards-grid"></div>
+
+          <!-- Empty State -->
+          <div id="stages-empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">🎪</div>
+            <h3>No Stages Found</h3>
+            <p>No festival stages match your query. Create a new stage to begin assigning performances.</p>
+            <button class="btn btn-primary btn-sm" onclick="FMS.Stages.openStageModal(null)">Create Stage</button>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 4. SCHEDULE & TIMELINE VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-schedule" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Master Performance Schedule</h2>
+              <div class="section-subtitle">Visual timeline swimlanes, chronological table, changeover buffers, and stage bookings.</div>
+            </div>
+            <div class="header-controls">
+              <div class="btn-group">
+                <button id="btn-view-timeline" class="btn btn-sm active">Visual Timeline</button>
+                <button id="btn-view-table" class="btn btn-sm">Table View</button>
+              </div>
+              <button id="btn-add-performance" class="btn btn-primary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Schedule Performance
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-left">
+              <!-- Festival Date Switcher -->
+              <div class="btn-group">
+                <button class="btn btn-sm schedule-date-btn active" data-date="2026-08-15">Day 1 (Aug 15)</button>
+                <button class="btn btn-sm schedule-date-btn" data-date="2026-08-16">Day 2 (Aug 16)</button>
+                <button class="btn btn-sm schedule-date-btn" data-date="all">All Days</button>
+              </div>
+
+              <select id="schedule-stage-filter">
+                <option value="all">All Stages</option>
+              </select>
+
+              <select id="schedule-artist-filter">
+                <option value="all">All Artists</option>
+              </select>
+            </div>
+
+            <div class="filter-right">
+              <div class="search-input-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="schedule-search-input" placeholder="Search scheduled sets...">
+              </div>
+              <span id="schedule-count-badge" class="badge badge-subtle">14 Sets</span>
+            </div>
+          </div>
+
+          <!-- View 1: Visual Timeline Swimlanes -->
+          <div id="schedule-timeline-view">
+            <div class="timeline-canvas-card">
+              <div class="timeline-grid-wrapper">
+                <!-- Hour headers -->
+                <div class="timeline-header-row">
+                  <div class="timeline-stage-header-col">Festival Stage</div>
+                  <div id="timeline-hour-markers" class="timeline-hour-markers"></div>
+                </div>
+
+                <!-- Stages swimlanes -->
+                <div id="timeline-stages-swimlanes"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: Chronological Table -->
+          <div id="schedule-table-view" style="display: none;">
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date & ID</th>
+                    <th>Show Time</th>
+                    <th>Artist / Band</th>
+                    <th>Stage Venue</th>
+                    <th>Soundcheck</th>
+                    <th>Changeover Setup</th>
+                    <th>Conflict Audit</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="schedule-table-tbody"></tbody>
+              </table>
+              <div id="schedule-empty-state" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📅</div>
+                <h3>No Performances Found</h3>
+                <p>No performances match your filter criteria.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 5. CONFLICT RESOLUTION CENTER VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-conflicts" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Automatic Conflict Detection Engine</h2>
+              <div class="section-subtitle">Interval-based mathematical conflict audit: stage overlaps, artist collisions, turnaround shortfalls, and gear incompatibilities.</div>
+            </div>
+            <div class="header-controls">
+              <span id="conflicts-total-badge" class="badge badge-danger">4 Conflicts Found</span>
+              <button id="btn-recalculate-conflicts" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Recalculate
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-left">
+              <select id="conflict-type-filter">
+                <option value="all">All Conflict Types</option>
+                <option value="Stage Overlap">Stage Overlaps (Critical)</option>
+                <option value="Artist Double-Booking">Artist Double-Bookings (Critical)</option>
+                <option value="Setup & Teardown Conflict">Setup & Teardown Collisions</option>
+                <option value="Insufficient Turnaround Time">Insufficient Turnaround Buffer</option>
+                <option value="Technical Incompatibility">Technical Rider Incompatibilities</option>
+                <option value="Soundcheck Conflict">Soundcheck Collisions</option>
+              </select>
+
+              <div class="search-input-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="conflict-search-input" placeholder="Filter by artist, stage, or reason...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Conflicts List Container -->
+          <div id="conflicts-list-container" class="conflicts-list"></div>
+
+          <!-- Empty State (Zero conflicts) -->
+          <div id="conflicts-empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon" style="color: var(--color-success);">✨</div>
+            <h3>Zero Scheduling Conflicts Detected!</h3>
+            <p>All performance intervals, turnaround buffers, and technical rider requirements are fully satisfied across all stages.</p>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 6. TECHNICAL MATRIX VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-technical" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Technical Rider Compatibility Audit</h2>
+              <div class="section-subtitle">Audit artist technical requirements against stage backline inventories and production capabilities.</div>
+            </div>
+          </div>
+
+          <div class="card matrix-controls-card">
+            <div class="form-grid-two">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Select Artist to Audit</label>
+                <select id="matrix-artist-select"></select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Select Target Stage</label>
+                <select id="matrix-stage-select"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div id="matrix-audit-result"></div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 7. REPORTS & CSV EXPORT VIEW -->
+        <!-- ============================================================== -->
+        <section id="view-reports" class="tab-view" style="display: none;">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2>Reports & Export Center</h2>
+              <div class="section-subtitle">Generate client-side CSV datasets and print-friendly festival timetables directly from current state.</div>
+            </div>
+          </div>
+
+          <div class="reports-grid">
+            <!-- Card 1: Artist Roster CSV -->
+            <div class="card report-card">
+              <div class="report-card-body">
+                <h3>Artist Roster CSV</h3>
+                <p>Export all registered artists, management contacts, rider specifications, and set durations.</p>
+              </div>
+              <button id="btn-export-artists-csv" class="btn btn-secondary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Artists CSV
+              </button>
+            </div>
+
+            <!-- Card 2: Festival Timetable CSV -->
+            <div class="card report-card">
+              <div class="report-card-body">
+                <h3>Master Schedule CSV</h3>
+                <p>Complete festival timetable with stage assignments, showtimes, soundcheck slots, and changeover buffers.</p>
+              </div>
+              <button id="btn-export-schedule-csv" class="btn btn-secondary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Schedule CSV
+              </button>
+            </div>
+
+            <!-- Card 3: Conflict Audit CSV -->
+            <div class="card report-card">
+              <div class="report-card-body">
+                <h3>Conflict Audit Log CSV</h3>
+                <p>Audit report of all currently detected scheduling collisions, turnaround violations, and technical warnings.</p>
+              </div>
+              <button id="btn-export-conflicts-csv" class="btn btn-danger">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Conflict Report
+              </button>
+            </div>
+
+            <!-- Card 4: Print Timetable -->
+            <div class="card report-card">
+              <div class="report-card-body">
+                <h3>Printable Day Timetables</h3>
+                <p>Clean, high-contrast, multi-stage paper timetables formatted specifically for festival staff and lanyards.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button id="btn-print-timetable-day1" class="btn btn-primary" style="flex: 1;">
+                  Print Day 1
+                </button>
+                <button id="btn-print-timetable-day2" class="btn btn-primary" style="flex: 1;">
+                  Print Day 2
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODALS -->
+  <!-- ============================================================== -->
+
+  <!-- 1. ARTIST FORM MODAL (Add / Edit) -->
+  <div id="artist-modal" class="modal-backdrop">
+    <div class="modal-window modal-window-lg">
+      <div class="modal-header">
+        <h3 id="artist-modal-title">Add New Festival Artist</h3>
+        <button class="btn-icon modal-close-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="artist-form">
+        <input type="hidden" id="artist-form-mode" value="add">
+        <div class="modal-body">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label class="form-label">Artist ID *</label>
+              <input type="text" id="artist-form-id" required placeholder="e.g. ART-013">
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label">Artist or Band Name *</label>
+              <input type="text" id="artist-form-name" required placeholder="e.g. Stellar Resonance">
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Musical Genre *</label>
+              <select id="artist-form-genre"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Number of Performers</label>
+              <input type="number" id="artist-form-performers" min="1" max="50" value="1">
+            </div>
+          </div>
+
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label class="form-label">Contact Person</label>
+              <input type="text" id="artist-form-contact" placeholder="Manager or Agent Name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" id="artist-form-email" placeholder="agent@agency.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" id="artist-form-phone" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Performance Duration (minutes)</label>
+              <input type="number" id="artist-form-set-duration" min="15" max="360" value="60">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Soundcheck Duration (minutes)</label>
+              <input type="number" id="artist-form-sc-duration" min="0" max="180" value="30">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Required Equipment & Backline</label>
+            <div id="artist-form-equipment-container"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Biography</label>
+            <textarea id="artist-form-bio" placeholder="Brief artist bio and musical style description..."></textarea>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Technical Rider Notes</label>
+              <textarea id="artist-form-technical" placeholder="Channel lists, mic counts, DI inputs, staging requirements..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hospitality & General Notes</label>
+              <textarea id="artist-form-notes" placeholder="Dressing room, special accommodations, arrival times..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Artist</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. ARTIST DETAIL MODAL -->
+  <div id="artist-detail-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Artist Dossier & Technical Rider</h3>
+        <button class="btn-icon modal-close-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="artist-detail-content" class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. STAGE FORM MODAL (Add / Edit) -->
+  <div id="stage-modal" class="modal-backdrop">
+    <div class="modal-window modal-window-lg">
+      <div class="modal-header">
+        <h3 id="stage-modal-title">Create Festival Stage</h3>
+        <button class="btn-icon modal-close-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="stage-form">
+        <input type="hidden" id="stage-form-mode" value="add">
+        <div class="modal-body">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label class="form-label">Stage ID *</label>
+              <input type="text" id="stage-form-id" required placeholder="e.g. STG-005">
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label">Stage Name *</label>
+              <input type="text" id="stage-form-name" required placeholder="e.g. Prism Light Stage">
+            </div>
+          </div>
+
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label class="form-label">Festival Location</label>
+              <input type="text" id="stage-form-location" placeholder="e.g. South Hill Lawn">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Audience Capacity</label>
+              <input type="number" id="stage-form-capacity" min="50" max="200000" value="5000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select id="stage-form-status">
+                <option value="Active">Active</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Minimum Turnaround Buffer (minutes) *</label>
+              <input type="number" id="stage-form-turnaround" min="5" max="120" value="20" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stage Dimensions (W x D x H)</label>
+              <input type="text" id="stage-form-dimensions" placeholder="e.g. 20m x 14m x 10m">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Available Backline & Production Equipment</label>
+            <div id="stage-form-equipment-container"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Technical Capabilities (One per line)</label>
+            <textarea id="stage-form-capabilities" placeholder="e.g. Dual 4K Side LED IMAG walls&#10;Full L-Acoustics K2 Line Array&#10;3-Phase 400A Power"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Setup Constraints & Turnaround Protocols</label>
+            <textarea id="stage-form-constraints" placeholder="e.g. Strict 20-min changeover buffer required. No open flame pyrotechnics allowed."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Stage</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. STAGE DETAIL MODAL -->
+  <div id="stage-detail-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>Stage Specifications & Inventory</h3>
+        <button class="btn-icon modal-close-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="stage-detail-content" class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. PERFORMANCE SCHEDULING MODAL (Add / Edit) -->
+  <div id="performance-modal" class="modal-backdrop">
+    <div class="modal-window modal-window-lg">
+      <div class="modal-header">
+        <h3 id="performance-modal-title">Schedule Performance</h3>
+        <button class="btn-icon modal-close-btn" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="performance-form">
+        <input type="hidden" id="perf-form-mode" value="add">
+        <div class="modal-body">
+          <div class="form-grid-three">
+            <div class="form-group">
+              <label class="form-label">Booking ID</label>
+              <input type="text" id="perf-form-id" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Festival Date *</label>
+              <input type="date" id="perf-form-date" required value="2026-08-15">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Booking Status</label>
+              <select id="perf-form-status">
+                <option value="Confirmed">Confirmed</option>
+                <option value="Tentative">Tentative</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Select Artist *</label>
+              <select id="perf-form-artist" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Select Stage Venue *</label>
+              <select id="perf-form-stage" required></select>
+            </div>
+          </div>
+
+          <!-- Real-time stage compatibility warning box -->
+          <div id="perf-form-compatibility-warning" style="display: none;"></div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Performance Showtime Start *</label>
+              <input type="time" id="perf-form-start-time" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Performance Showtime End *</label>
+              <input type="time" id="perf-form-end-time" required>
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Soundcheck Start Time</label>
+              <input type="time" id="perf-form-sc-start">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Soundcheck End Time</label>
+              <input type="time" id="perf-form-sc-end">
+            </div>
+          </div>
+
+          <div class="form-grid-two">
+            <div class="form-group">
+              <label class="form-label">Stage Setup Duration (minutes)</label>
+              <input type="number" id="perf-form-setup-duration" min="0" max="180" value="20">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stage Teardown Duration (minutes)</label>
+              <input type="number" id="perf-form-teardown-duration" min="0" max="180" value="15">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Production & Staging Notes</label>
+            <textarea id="perf-form-notes" placeholder="Notes for stage manager, lighting cues, special guest appearances..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Performance</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APPLICATION SCRIPTS (Ordered for dependency resolution) -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/conflicts.js"></script>
+  <script src="js/artists.js"></script>
+  <script src="js/stages.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
